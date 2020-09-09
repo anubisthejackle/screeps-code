@@ -1,0 +1,22 @@
+{
+  "name": "screeps-code",
+  "version": "1.0.0",
+  "description": "Screeps code for AnubisTheJackle",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anubisthejackle/screeps-code.git"
+  },
+  "author": "Travis Weston",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anubisthejackle/screeps-code/issues"
+  },
+  "homepage": "https://github.com/anubisthejackle/screeps-code#readme",
+  "devDependencies": {
+    "grunt": "^1.3.0"
+  }
+}
