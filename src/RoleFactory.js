@@ -1,6 +1,6 @@
-let Harvester=require('class.Harvester');
-let HarvesterHauler=require('class.HarvesterHauler');
-let Hauler=require('class.Hauler');
+let Harvester=require('roles.Harvester');
+let HarvesterHauler=require('roles.HarvesterHauler');
+let Hauler=require('roles.Hauler');
 
 class RoleFactory {
 
