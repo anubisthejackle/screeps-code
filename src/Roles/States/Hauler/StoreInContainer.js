@@ -1,4 +1,4 @@
-class Interface {
+class StoreInContainer {
 
     constructor() {
         
@@ -18,4 +18,4 @@ class Interface {
 
 }
 
-module.exports = Interface;
+module.exports = StoreInContainer;

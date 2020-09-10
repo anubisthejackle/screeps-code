@@ -2,11 +2,33 @@ let Interface = require('state.Interface');
 
 class LocateSource extends Interface {
 
-    Tick(creep){
-        
+    constructor(creep) {
+        this.creep = creep;
     }
 
-    OnEnter() {}
+    Tick(){
+        let searchResults = this.creep.room.find(FIND_SOURCE);
+
+        if(searchResults.length == 0){
+            return;
+        }
+
+        let target = _.sample(searchResults);
+
+        this.creep.memory.destination = {
+            id: target.id,
+            x: target.pos.x,
+            y: target.pos.y
+        };
+
+        this.creep.memory.source = this.creep.memory.destination;
+
+        this.creep.memory.destinationType = 'source';
+    }
+
+    OnEnter() {
+        this.creep.currentState = 'locateSource';
+    }
 
     OnExit() {}
 
