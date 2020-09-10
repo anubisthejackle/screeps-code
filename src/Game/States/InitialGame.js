@@ -1,3 +1,5 @@
+require('Creep.js');
+
 let Interface = require('state.Interface');
 let HarvesterHauler = require('roles.HarvesterHauler');
 class InitialGame extends Interface {
@@ -7,17 +9,20 @@ class InitialGame extends Interface {
     }
 
     Tick() {
-        // Iterate over Creeps
-        // Determine Creeps type
-        // Execute the role.Tick(creep) method for each creep
+        this.creeps = this.room.find(FIND_MY_CREEPS);
+        
+        if(this.creeps.length > 0){
+            this.creeps.forEach((creep) => {
+                creep.getRole().Tick();
+            })
+        }
 
-        // Determine the Maximum creep count
         const maxCreepCount = this.DefineMaxCreeps();
-        // Spawn creeps
         this.SpawnCreeps(maxCreepCount);
 
         // Check for construction sites:
         // If there are fewer than 5 combined extensions and extension construction sites, add one to the map.
+        this.PlaceExtension();
     }
 
     DefineMaxCreeps() {
@@ -39,7 +44,7 @@ class InitialGame extends Interface {
     }
 
     SpawnCreeps(maxCreepCount){
-        let creeps = this.room.find(FIND_MY_CREEPS);
+        
         if(creeps.length == maxCreepCount){
             // We are already at the maximum number of creeps, so skip spawning.
             return;
@@ -47,8 +52,32 @@ class InitialGame extends Interface {
 
         let spawns = this.room.find(FIND_MY_SPAWNS);
         spawns.forEach(spawn => {
-            spawn.spawnCreep(body, name);
+            if(spawn.spawning){
+                return;
+            }
+            let toSpawn = new HarvesterHauler();
+            spawn.spawnCreep(toSpawn.body, toSpawn.generateName(), {
+                memory: {
+                    role: 'harvesterHauler'
+                }
+            });
         })
+    }
+
+    PlaceExtension(){
+        const extensions = this.room.find(FIND_MY_STRUCTURES, {
+            filter: { structureType: STRUCTURE_EXTENSION }
+        });
+
+        const construction = this.room.find(FIND_MY_CONSTRUCTION_SITES, {
+            filter: { structureType: STRUCTURE_EXTENSION }
+        });
+
+        if((extensions.length + construction.length) >= 5){
+            return;
+        }
+
+
     }
 
     OnEnter() {
@@ -68,4 +97,4 @@ class InitialGame extends Interface {
 
 }
 
-module.exports = Interface;
+module.exports = InitialGame;

@@ -1,3 +1,5 @@
+let Role = require('roles.Role');
+
 /**
  * These mixins are the different Actions this role is allowed to take.
  */
@@ -8,9 +10,9 @@ let Build=require('mixins.build');
 
 let StateMachine = require('state.Machine');
 
-class HarvesterHauler {
+class HarvesterHauler extends Role{
 
-    constructor() {
+    constructor(creep) {
 
         this.body = [WORK, CARRY, CARRY, CARRY, MOVE];
 
