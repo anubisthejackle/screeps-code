@@ -1,4 +1,4 @@
-require('Creep.js');
+require('creep');
 
 let Interface = require('state.Interface');
 let HarvesterHauler = require('roles.HarvesterHauler');
