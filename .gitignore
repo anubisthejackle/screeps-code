@@ -1,3 +1,4 @@
 node_modules
 .screeps.json
 package-lock.json
+dist
