@@ -46,7 +46,16 @@ module.exports = function(grunt) {
                     dest: 'dist/',
                     filter: 'isFile',
                     rename: function (dest, src) {
-                        return dest + src.replace(/\//g, '_');
+                        /**
+                         * Screeps doesn't allow for a Folder based structure. For that reason, we require with periods, and then
+                         * rewrite to a flat folder structure here.
+                         * 
+                         * This line converts folders to lowercase, and replaces slashes in folder structure to periods in the filename.
+                         */
+                        let array = src.split('/');
+                        array[0] = array[0].toLowerCase();
+
+                        return dest + array.join('.');
                     },
                 }],
             }
