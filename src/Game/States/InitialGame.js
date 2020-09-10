@@ -65,9 +65,14 @@ class InitialGame extends Interface {
     }
 
     PlaceExtension(){
+
         const extensions = this.room.find(FIND_MY_STRUCTURES, {
             filter: { structureType: STRUCTURE_EXTENSION }
         });
+
+        if(extensions.length >= 5){
+            return;
+        }
 
         const construction = this.room.find(FIND_MY_CONSTRUCTION_SITES, {
             filter: { structureType: STRUCTURE_EXTENSION }
@@ -76,6 +81,10 @@ class InitialGame extends Interface {
         if((extensions.length + construction.length) >= 5){
             return;
         }
+
+        /**
+         * Put some code here that will find a good spot to place the extensions.
+         */
 
 
     }

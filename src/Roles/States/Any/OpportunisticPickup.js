@@ -17,3 +17,5 @@ class OpportunisticPickup extends Interface {
 
     }
 }
+
+module.exports=OpportunisticPickup;

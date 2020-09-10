@@ -1,14 +1,11 @@
 let Role = require('roles.Role');
 
-/**
- * These mixins are the different Actions this role is allowed to take.
- */
-let Harvest=require('mixins.harvest');
-let Haul=require('mixins.haul');
-let Upgrade=require('mixins.upgrade');
-let Build=require('mixins.build');
-
 let StateMachine = require('state.Machine');
+
+let OpportunisticPickup = require('roles.States.Any.OpportunisticPickup');
+let MoveToLocation = require('roles.States.Any.MoveToLocation');
+
+let LocateSource = require('roles.States.Harvester.LocateSource');
 
 class HarvesterHauler extends Role{
 
@@ -17,6 +14,27 @@ class HarvesterHauler extends Role{
         this.body = [WORK, CARRY, CARRY, CARRY, MOVE];
 
         this._stateMachine = new StateMachine();
+
+        /**
+         * States:
+         *  - Opportunistic Pickup
+         *  - Find a Source
+         *  - Move to the Source
+         *  - Harvest the Source
+         *  - Choose a Deposit Location
+         *  - Move to Deposit Location
+         *  - Transfer Energy to Source
+         *  - Upgrade Room Controller
+         */
+
+        this._stateMachine.AddAnyTransition(new OpportunisticPickup(creep), () => {
+            let resource = creep.room.findInRange(FIND_DROPPED_RESOURCES, 1);
+            if(!resource){
+                return false;
+            }
+
+            return true;
+        });
 
     }
 
