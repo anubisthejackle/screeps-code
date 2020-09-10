@@ -13,7 +13,7 @@ class InitialGame extends Interface {
         this.creeps = this.room.find(FIND_MY_CREEPS);
         
         if(this.creeps.length > 0){
-            console.log("CREEPS: ", JSON.stringify(this.creeps));
+            // console.log("CREEPS: ", JSON.stringify(this.creeps));
             _.forEach(this.creeps, (creep) => {
                 let role = new HarvesterHauler(creep);
                 role.Tick();
@@ -21,7 +21,7 @@ class InitialGame extends Interface {
         }
 
         const maxCreepCount = this.DefineMaxCreeps();
-        console.log('Max', maxCreepCount);
+        // console.log('Max', maxCreepCount);
         this.SpawnCreeps(_.filter(this.creeps).length, maxCreepCount);
 
         // Check for construction sites:
@@ -60,7 +60,7 @@ class InitialGame extends Interface {
                 return;
             }
             let body = HarvesterHauler.getBody();
-            console.log(body);
+            // console.log(body);
             spawn.spawnCreep(body, HarvesterHauler.generateName(), {
                 memory: {
                     role: 'harvesterHauler'
