@@ -75,7 +75,7 @@ class StateMachine {
 
         return null;
     }
-    
+
 }
 
 class Transition {
@@ -84,3 +84,5 @@ class Transition {
         this.To = to;
     }
 }
+
+module.exports=StateMachine;
