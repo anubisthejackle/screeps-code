@@ -46,6 +46,10 @@ class Role {
         
     }
 
+    idle(creep){
+        
+    }
+
     shouldSwitchToOpportunisticPickupState(creep){
         if(creep.memory.state == STATE_SPAWNING){
             // Can't pickup if you aren't born yet.
