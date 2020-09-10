@@ -11,7 +11,7 @@ class RoleFactory {
                 return new Harvester();
             case 'hauler':
                 return new Hauler();
-            case 'harvesterhauler':
+            case 'harvesterHauler':
                 return new HarvesterHauler();
             default:
                 return false;

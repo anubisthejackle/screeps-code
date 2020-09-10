@@ -3,6 +3,7 @@ let Interface = require('state.Interface');
 class LocateSource extends Interface {
 
     constructor(creep) {
+        super();
         this.creep = creep;
     }
 
@@ -27,7 +28,7 @@ class LocateSource extends Interface {
     }
 
     OnEnter() {
-        this.creep.currentState = 'locateSource';
+        this.creep.memory.currentState = 'locateSource';
     }
 
     OnExit() {}

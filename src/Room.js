@@ -7,7 +7,7 @@ class Room {
         this._stateMachine = new StateMachine();
 
         this._stateMachine.AddAnyTransition(new StateInitialGame(room), () => {
-            
+            console.log('Checking state');
             const extensions = room.find(FIND_MY_STRUCTURES, {
                 filter: { structureType: STRUCTURE_EXTENSION }
             });

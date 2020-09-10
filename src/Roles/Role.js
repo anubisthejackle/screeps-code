@@ -6,7 +6,7 @@
 
 class Role {
 
-    generateName(){
+    static generateName(){
         var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var dt = new Date().getTime();
             var r = (dt + Math.random()*16)%16 | 0;

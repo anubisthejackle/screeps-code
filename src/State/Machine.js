@@ -9,9 +9,10 @@ class StateMachine {
     }
 
     Tick(){
+        // console.log('Ticking machine');
         let transition = this.GetTransition();
         if( transition ){
-            this.SetState(transition.to);
+            this.SetState(transition.To);
         }
 
         if(!this._currentState){
@@ -26,7 +27,7 @@ class StateMachine {
             return;
         }
 
-        if(this._currentState.OnExit){
+        if(this._currentState && this._currentState.OnExit){
             this._currentState.OnExit();
         }
 

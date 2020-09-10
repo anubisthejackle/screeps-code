@@ -1,12 +1,17 @@
 let Interface = require('state.Interface');
 
 class OpportunisticPickup extends Interface {
-    Tick(creep) {
-        let resource = creep.room.findInRange(FIND_DROPPED_RESOURCES, 1);
+    constructor(creep){
+        super();
+        this.creep = creep;
+    }
+    
+    Tick() {
+        let resource = this.creep.room.findInRange(FIND_DROPPED_RESOURCES, 1);
         if(!resource){
             return;
         }
-        creep.pickup(resource);
+        this.creep.pickup(resource);
     }
 
     OnEnter() {

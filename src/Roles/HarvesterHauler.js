@@ -28,8 +28,7 @@ let ChooseActionType = require('roles.States.HarvesterHauler.ChooseActionType');
 class HarvesterHauler extends Role{
 
     constructor(creep) {
-
-        this.body = [WORK, CARRY, CARRY, CARRY, MOVE];
+        super();
 
         this._stateMachine = new StateMachine();
 
@@ -75,7 +74,7 @@ class HarvesterHauler extends Role{
         this._stateMachine.AddTransition(chooseActionType, locateConstructionSite, ChoseToBeBuilder);
         this._stateMachine.AddTransition(chooseActionType, locateRepairSite, ChoseToBeRepairer);
 
-        this._stateMachine.AddTransition(moveToLocation, buildConstructionSite, MovementTargetTypeConstruction);
+        // this._stateMachine.AddTransition(moveToLocation, buildConstructionSite, MovementTargetTypeConstruction);
         this._stateMachine.AddTransition(moveToLocation, harvestSource, MovementTargetTypeSource);
         this._stateMachine.AddTransition(moveToLocation, upgradeRoomController, MovementTargetTypeController);
         this._stateMachine.AddTransition(moveToLocation, transferToSpawn, MovementTargetTypeSpawn);
@@ -91,6 +90,10 @@ class HarvesterHauler extends Role{
 
     Tick() {
         this._stateMachine.Tick();
+    }
+
+    static getBody(){
+        return [WORK, CARRY, CARRY, CARRY, MOVE];
     }
 
 }

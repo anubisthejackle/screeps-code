@@ -3,6 +3,7 @@ let Interface = require('state.Interface');
 class MoveToLocation extends Interface {
     
     constructor(creep) {
+        super();
         this.creep = creep;
     }
 
