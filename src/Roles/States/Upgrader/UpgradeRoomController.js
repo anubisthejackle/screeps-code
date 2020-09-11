@@ -10,8 +10,10 @@ class UpgradeRoomController extends Interface {
     Tick() {
 
         this.creep.say('Upgrade');
-        let controller = Game.getObjectById(this.creep.memory.dropOffLocation.id);
-        let result = this.creep.upgradeController(controller);
+        let result = this.creep.upgradeController(this.creep.room.controller);
+        if(result == ERR_NOT_IN_RANGE){
+            this.creep.moveTo(this.creep.room.controller);
+        }
 
     }
 

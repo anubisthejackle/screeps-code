@@ -29,7 +29,6 @@ class Harvester extends Role{
         this._stateMachine.AddTransition(locateSource, moveToLocation, HasMovementTarget);
         this._stateMachine.AddTransition(moveToLocation, harvestSource, ReachedDestination);
         
-        
         if(creep.memory.currentState){
             eval("this._stateMachine.SetState(" + creep.memory.currentState + ");")
         }else{
