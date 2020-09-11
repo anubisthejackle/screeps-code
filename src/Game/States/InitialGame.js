@@ -65,22 +65,22 @@ class InitialGame extends Interface {
             }).length;
 
             let haulerCount = _.filter(this.creeps, (creep) => {
-                return creep.memory.role == 'harvester';
+                return creep.memory.role == 'hauler';
             }).length;
 
             let upgraderCount = _.filter(this.creeps, (creep) => {
-                return creep.memory.role == 'harvester';
+                return creep.memory.role == 'upgrader';
             }).length;
-
-            if(harvesterCount < Memory.rooms[this.room.name].maxHarvesters && this.SpawnHarvesters(spawn)){
+            
+            if(this.SpawnHaulers(spawn, haulerCount, harvesterCount) == OK){
                 return;
             }
 
-            if(haulerCount < Math.ceil(harvesterCount/2) && this.SpawnHaulers(spawn)){
+            if(this.SpawnHarvesters(spawn, harvesterCount) == OK){
                 return;
             }
 
-            if(upgraderCount < Memory.rooms[this.room.name].maxUpgraders && this.SpawnUpgrader(spawn)){
+            if(this.SpawnUpgrader(spawn, upgraderCount) == OK){
                 return;
             }
             
@@ -88,8 +88,12 @@ class InitialGame extends Interface {
 
     }
 
-    SpawnHarvesters(spawn) {
+    SpawnHarvesters(spawn, harvesterCount) {
         
+        if(harvesterCount > 0 && harvesterCount >= Memory.rooms[this.room.name].maxHarvesters){
+            return;
+        }
+
         // We want to update the max number of harvesters whenever we spawn one.
         let maxHarvesters = 0;
 
@@ -112,11 +116,13 @@ class InitialGame extends Interface {
         
     }
     
-    SpawnHaulers(spawn) {
+    SpawnHaulers(spawn, haulerCount, harvesterCount) {
         
+        if(haulerCount > 0 && haulerCount >= (harvesterCount/2)){
+            return;
+        }
 
-
-        let body = Haulers.getBody();
+        let body = Hauler.getBody();
         let result = spawn.spawnCreep(body, Hauler.generateName(), {
             memory: {
                 role: 'hauler'
@@ -126,8 +132,12 @@ class InitialGame extends Interface {
     
     }
     
-    SpawnUpgrader(spawn) {
+    SpawnUpgrader(spawn, upgraderCount) {
         
+        if(upgraderCount > 0 && upgraderCount >= Memory.rooms[this.room.name].maxUpgraders){
+            return;
+        }
+
         let maxUpgraders = 0;
         let sources = this.room.find(FIND_SOURCES);
         _.forEach(sources, source => {
@@ -143,7 +153,7 @@ class InitialGame extends Interface {
                 role: 'upgrader'
             }
         });
-        
+
         return result == OK;
 
     }

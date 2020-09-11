@@ -14,27 +14,17 @@ class LocateDropOffLocation extends Interface {
 
         let choice = Math.floor(Math.random() * (max - min + 1) + min);
         let target;
-        choice = 1; // Force choice to spawn.
-        // if(choice == 1){
-        //     this.creep.memory.destinationType = 'controller';
-        //     target = this.creep.room.controller.pos;
-        //     target.id = this.creep.room.controller.id;
-        // }
 
-        
         if(choice == 2){
+            // Find an upgrader
+            let upgraders = _.filter(this.creeps, (creep) => {
+                return creep.memory.role == 'upgrader';
+            });
 
-            // Locate all extensions that are not full.
-            // Order by lowest filled state
-            // This is the target.
+            upgrader = _.sample(upgraders);
+            target = upgrader.pos;
+            target.id = upgrader.id;
 
-            // this.creep.memory.destinationType = 'container';
-            // const extensions = this.creep.room.find(FIND_MY_STRUCTURES, {
-            //     filter: { structureType: STRUCTURE_CONTAINER }
-            // });
-            // if(_.filter(extensions).length > 0){
-            //     target = _.sample(extensions).pos;
-            // }
         }
         
         if(choice == 1 || !target){

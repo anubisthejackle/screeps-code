@@ -11,6 +11,7 @@ let TransferToSpawn = require('roles.States.Hauler.TransferToSpawn');
 let StoreInContainer = require('roles.States.Hauler.StoreInContainer');
 let LocateDropOffLocation = require('roles.States.Hauler.LocateDropOffLocation');
 let LocateDroppedEnergy = require('roles.States.Hauler.LocateDroppedEnergy');
+let TransferEnergy = require('roles.States.Hauler.TransferEnergy');
 
 class Hauler extends Role{
 
@@ -26,6 +27,7 @@ class Hauler extends Role{
         let storeInContainer = new StoreInContainer(creep);
         let locateDropOffLocation = new LocateDropOffLocation(creep);
         let locateDroppedEnergy = new LocateDroppedEnergy(creep);
+        let transferEnergy = new TransferEnergy(creep);
         
         /** Transition Conditions **/
         let InRangeOfDroppedResource = () => { return creep.pos.findInRange(FIND_DROPPED_RESOURCES, 1).length > 0 && (creep.store[RESOURCE_ENERGY] < creep.store.getCapacity()); }
@@ -51,6 +53,7 @@ class Hauler extends Role{
          * We are using the fact that the Any transition auto-picks up to skip that step here.
          */
         this._stateMachine.AddTransition(OpportunisticPickup, locateDropOffLocation, FullOfEnergy);
+        this._stateMachine.AddTransition(transferEnergy, locateDropOffLocation, NotYetFull);
 
         this._stateMachine.AddTransition(locateDropOffLocation, moveToLocation, HasMovementTarget);
                  
