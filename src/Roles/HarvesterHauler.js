@@ -1,7 +1,6 @@
 let Role = require('roles.Role');
 
 let StateMachine = require('state.Machine');
-let Interface = require('state.Interface');
 
 /** Any States **/
 let OpportunisticPickup = require('roles.States.Any.OpportunisticPickup');
