@@ -1,7 +1,10 @@
 require('creep');
 
 let Interface = require('state.Interface');
-let HarvesterHauler = require('roles.HarvesterHauler');
+let Upgrader = require('roles.Upgrader');
+let Harvester = require('roles.Harvester');
+let Hauler = require('roles.Hauler');
+
 class InitialGame extends Interface {
 
     constructor(room) {
@@ -15,60 +18,134 @@ class InitialGame extends Interface {
         if(this.creeps.length > 0){
             // console.log("CREEPS: ", JSON.stringify(this.creeps));
             _.forEach(this.creeps, (creep) => {
-                let role = new HarvesterHauler(creep);
+                
+                let role;
+                switch(creep.memory.role){
+                    case 'harvester':
+                        role = new Harvester(creep);
+                        break;
+                    case 'hauler':
+                        role = new Hauler(creep);
+                        break;
+                    case 'upgrader':
+                        role = new Upgrader(creep);
+                        break;
+                    default:
+                        return;
+                }
+                
                 role.Tick();
             })
         }
-
-        const maxCreepCount = this.DefineMaxCreeps();
         
-        this.SpawnCreeps(_.filter(this.creeps).length, maxCreepCount);
+        this.SpawnCreeps();
 
         // Check for construction sites:
         // If there are fewer than 5 combined extensions and extension construction sites, add one to the map.
         this.PlaceExtension();
+
     }
 
-    DefineMaxCreeps() {
-
-        let maxCreepCount = Memory.rooms[this.room.name].maxCreepCount;
-
-        if(maxCreepCount){
-           return maxCreepCount;
-        }
-        maxCreepCount = 0;
-
-        let sources = this.room.find(FIND_SOURCES);
-        _.forEach(sources, source => {
-            const look = this.room.lookForAtArea(LOOK_TERRAIN, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true);
-            maxCreepCount += 9 - _.filter(look, {terrain: "wall"}).length; // Remove the number of structures found from the total box size.            
-        });
-
-        Memory.rooms[this.room.name].maxCreepCount = maxCreepCount;
-        return maxCreepCount;
-    }
-
-    SpawnCreeps(creepCount, maxCreepCount){
-        
-        if(creepCount >= maxCreepCount){
-            console.log("Already at maximum creeps");
-            // We are already at the maximum number of creeps, so skip spawning.
-            return;
-        }
-
+    SpawnCreeps(){
+        /**
+         *
+         * - A harvester for every open square surrounding a source 
+         * - A hauler for every 2 harvesters (rounded up)
+         * - An upgrader for every opens quare surrounding the room controller
+         *  
+         */
         let spawns = this.room.find(FIND_MY_SPAWNS);
         _.forEach(spawns, spawn => {
             if(spawn.spawning){
                 return;
             }
-            let body = HarvesterHauler.getBody();
-            // console.log(body);
-            spawn.spawnCreep(body, HarvesterHauler.generateName(), {
-                memory: {
-                    role: 'harvesterHauler'
-                }
-            });
-        })
+
+            let harvesterCount = _.filter(this.creeps, (creep) => {
+                return creep.memory.role == 'harvester';
+            }).length;
+
+            let haulerCount = _.filter(this.creeps, (creep) => {
+                return creep.memory.role == 'harvester';
+            }).length;
+
+            let upgraderCount = _.filter(this.creeps, (creep) => {
+                return creep.memory.role == 'harvester';
+            }).length;
+
+            if(harvesterCount < Memory.rooms[this.room.name].maxHarvesters && this.SpawnHarvesters(spawn)){
+                return;
+            }
+
+            if(haulerCount < Math.ceil(harvesterCount/2) && this.SpawnHaulers(spawn)){
+                return;
+            }
+
+            if(upgraderCount < Memory.rooms[this.room.name].maxUpgraders && this.SpawnUpgrader(spawn)){
+                return;
+            }
+            
+        });
+
+    }
+
+    SpawnHarvesters(spawn) {
+        
+        // We want to update the max number of harvesters whenever we spawn one.
+        let maxHarvesters = 0;
+
+        let sources = this.room.find(FIND_SOURCES);
+        _.forEach(sources, source => {
+            const look = this.room.lookForAtArea(LOOK_TERRAIN, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true);
+            maxHarvesters += 9 - _.filter(look, {terrain: "wall"}).length; // Remove the number of structures found from the total box size.            
+        });
+
+        Memory.rooms[this.room.name].maxHarvesters = maxHarvesters;
+        
+        let body = Harvester.getBody();
+        let result = spawn.spawnCreep(body, Harvester.generateName(), {
+            memory: {
+                role: 'harvester'
+            }
+        });
+
+        return result == OK;
+        
+    }
+    
+    SpawnHaulers(spawn) {
+        
+
+
+        let body = Haulers.getBody();
+        let result = spawn.spawnCreep(body, Hauler.generateName(), {
+            memory: {
+                role: 'hauler'
+            }
+        });
+        return result == OK;
+    
+    }
+    
+    SpawnUpgrader(spawn) {
+        
+        let maxUpgraders = 0;
+        let sources = this.room.find(FIND_SOURCES);
+        _.forEach(sources, source => {
+            const look = this.room.lookForAtArea(LOOK_TERRAIN, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true);
+            maxUpgraders += 9 - _.filter(look, {terrain: "wall"}).length; // Remove the number of structures found from the total box size.            
+        });
+
+        Memory.rooms[this.room.name].maxUpgraders = maxUpgraders;
+
+        let body = Upgrader.getBody();
+        let result = spawn.spawnCreep(body, Upgrader.generateName(), {
+            memory: {
+                role: 'upgrader'
+            }
+        });
+        
+        return result == OK;
+
     }
 
     PlaceExtension(){
@@ -98,13 +175,11 @@ class InitialGame extends Interface {
 
     OnEnter() {
         if(!Memory.rooms){
-            Memory.rooms = [];
+            Memory.rooms = {};
         }
-        if(!Memory.rooms[this.room.name]){
-            Memory.rooms[this.room.name] = {
-                maxCreepCount: 0,
-            };
-        }
+
+        Memory.rooms[this.room.name].maxHarvesters = 0;
+        Memory.rooms[this.room.name].maxUpgraders = 0;
     }
 
     OnExit() {
