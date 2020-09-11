@@ -8,23 +8,28 @@ class LocateSource extends Interface {
     }
 
     Tick(){
-        let searchResults = this.creep.room.find(FIND_SOURCE);
-
-        if(searchResults.length == 0){
+        // console.log('LS1');
+        let searchResults = this.creep.room.find(FIND_SOURCES);
+        
+        if(!searchResults){
+            console.log('Nothing found');
             return;
         }
-
+        
         let target = _.sample(searchResults);
-
+        // console.log(target);
+        
         this.creep.memory.destination = {
             id: target.id,
             x: target.pos.x,
             y: target.pos.y
         };
-
+        
         this.creep.memory.source = this.creep.memory.destination;
-
+        // console.log(this.creep.memory.source);
+        
         this.creep.memory.destinationType = 'source';
+        // console.log(this.creep.memory.destinationType);
     }
 
     OnEnter() {

@@ -9,7 +9,7 @@ class UpgradeRoomController {
     }
 
     OnEnter() {
-
+        this.creep.memory.currentState = 'upgradeRoomController';
     }
 
     OnExit() {

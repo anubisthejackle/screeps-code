@@ -8,21 +8,22 @@ class MoveToLocation extends Interface {
     }
 
     Tick() {
-        
-        this.creep.moveTo(this.creep.memory.destination.x, this.creep.memory.destination.y);
-        
-        if(Math.abs(this.creep.pos.x - pos.x) < (range + 1) && Math.abs(this.creep.pos.y - pos.y) < (range + 1)){
-            this.creep.memory.destination = null;
+        if(!this.creep.memory.destination){
+            return;
         }
+        
+        this.creep.moveTo(this.creep.memory.destination.x, this.creep.memory.destination.y, {reusePath: 15, visualizePathStyle: {}});
 
     }
 
     OnEnter() {
-        this.creep.memory.currentState = 'moving';
+        this.creep.memory.currentState = 'moveToLocation';
     }
 
     OnExit() {
-
+        
+        this.creep.memory.destination = null;
+    
     }
 }
 

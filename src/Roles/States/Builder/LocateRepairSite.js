@@ -9,7 +9,7 @@ class LocateRepairSite {
     }
 
     OnEnter() {
-
+        this.creep.memory.currentState = 'locateRepairSite';
     }
 
     OnExit() {

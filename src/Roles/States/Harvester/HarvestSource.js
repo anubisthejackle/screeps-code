@@ -9,9 +9,10 @@ class HarvestSource extends Interface {
 
     Tick() {
 
-        this.creep.harvest(this.creep.memory.destination);
+        let source = Game.getObjectById(this.creep.memory.source.id);
+        this.creep.harvest(source);
         
-        if(creep.store[RESOURCE_ENERGY] == creep.store.getCapacity()){
+        if(this.creep.store[RESOURCE_ENERGY] == this.creep.store.getCapacity()){
             this.creep.memory.destinationType = null;
         }
 
@@ -23,6 +24,8 @@ class HarvestSource extends Interface {
 
     OnExit() {
         this.creep.memory.destination = null;
+        this.creep.memory.destinationType = null;
+        this.creep.memory.source = null;
     }
 }
 

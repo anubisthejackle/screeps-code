@@ -7,11 +7,13 @@ class OpportunisticPickup extends Interface {
     }
     
     Tick() {
-        let resource = this.creep.room.findInRange(FIND_DROPPED_RESOURCES, 1);
-        if(!resource){
+        console.log("Running");
+        let resource = this.creep.pos.findInRange(FIND_DROPPED_RESOURCES, 1);
+        console.log(resource);
+        if(!resource[0]){
             return;
         }
-        this.creep.pickup(resource);
+        this.creep.pickup(resource[0]);
     }
 
     OnEnter() {

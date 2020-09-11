@@ -9,8 +9,9 @@ class ChooseActionType extends Interface {
 
     Tick() {
         
-        let choice = Math.random() * 2 + 1;
-
+        let choice = Math.floor(Math.random() * 2) + 1;
+        choice = 2;
+        console.log(choice);
         switch(choice){
             case 1:
                 this.creep.memory.actionType = 'build';

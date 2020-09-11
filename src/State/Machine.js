@@ -1,6 +1,7 @@
 class StateMachine {
 
-    constructor(){
+    constructor(entity){
+        this._entity = entity;
         this._currentState = null;
         this._transitions = [];
         this._anyTransitions = [];
@@ -16,6 +17,7 @@ class StateMachine {
         }
 
         if(!this._currentState){
+            console.log('Current state not found');
             return;
         }
 
@@ -23,7 +25,9 @@ class StateMachine {
     }
 
     SetState(state){
+        // console.log('SETTING STATE');
         if (state == this._currentState){
+            // console.log('BUT NOT REALLY');
             return;
         }
 
@@ -33,8 +37,14 @@ class StateMachine {
 
         this._currentState = state;
 
+        if(this._entity){
+            // console.log('CURRENT STATE1: ', this._entity.memory.currentState)
+            this._entity.memory.currentState = state;
+            // console.log('CURRENT STATE2: ', this._entity.memory.currentState)
+        }
+
         this._currentTransitions = [];
-        let type = typeof _currentState;
+        let type = this._currentState.constructor.name;
         if(this._transitions[type]){
             this._currentTransitions = this._transitions[type];
         }
@@ -46,7 +56,8 @@ class StateMachine {
 
     AddTransition(from, to, predicate){
 
-        let type = typeof from;
+        let type = from.constructor.name;
+        
         if(!this._transitions[type]){
             this._transitions[type] = [];
         }

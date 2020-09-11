@@ -4,7 +4,7 @@ class Room {
 
     constructor(room) {
 
-        this._stateMachine = new StateMachine();
+        this._stateMachine = new StateMachine(room);
 
         this._stateMachine.AddAnyTransition(new StateInitialGame(room), () => {
             // console.log('Checking state');

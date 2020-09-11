@@ -9,7 +9,7 @@ class StoreInContainer {
     }
 
     OnEnter() {
-
+        this.creep.memory.currentState = 'storeInContainer';
     }
 
     OnExit() {

@@ -12,7 +12,7 @@ class LocateConstructionSite extends Interface {
     }
 
     OnEnter() {
-        this.creep.memory.currentState = 'locatingConstructionSite';
+        this.creep.memory.currentState = 'locateConstructionSite';
     }
 
     OnExit() {
