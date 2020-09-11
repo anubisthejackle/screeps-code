@@ -21,7 +21,7 @@ class InitialGame extends Interface {
         }
 
         const maxCreepCount = this.DefineMaxCreeps();
-        // console.log('Max', maxCreepCount);
+        
         this.SpawnCreeps(_.filter(this.creeps).length, maxCreepCount);
 
         // Check for construction sites:
@@ -33,14 +33,15 @@ class InitialGame extends Interface {
 
         let maxCreepCount = Memory.rooms[this.room.name].maxCreepCount;
 
-        if(maxCreepCount != 0){
-            return maxCreepCount;
+        if(maxCreepCount){
+           return maxCreepCount;
         }
+        maxCreepCount = 0;
 
         let sources = this.room.find(FIND_SOURCES);
         _.forEach(sources, source => {
-            const look = this.room.lookForAtArea(LOOK_STRUCTURES, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true);
-            maxCreepCount += 9 - look.length; // Remove the number of structures found from the total box size.            
+            const look = this.room.lookForAtArea(LOOK_TERRAIN, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true);
+            maxCreepCount += 9 - _.filter(look, {terrain: "wall"}).length; // Remove the number of structures found from the total box size.            
         });
 
         Memory.rooms[this.room.name].maxCreepCount = maxCreepCount;
@@ -49,7 +50,8 @@ class InitialGame extends Interface {
 
     SpawnCreeps(creepCount, maxCreepCount){
         
-        if(creepCount == maxCreepCount){
+        if(creepCount >= maxCreepCount){
+            console.log("Already at maximum creeps");
             // We are already at the maximum number of creeps, so skip spawning.
             return;
         }

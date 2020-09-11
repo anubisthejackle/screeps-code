@@ -80,7 +80,7 @@ class HarvesterHauler extends Role{
         this._stateMachine.AddTransition(chooseActionType, locateConstructionSite, ChoseToBeBuilder);
         this._stateMachine.AddTransition(chooseActionType, locateRepairSite, ChoseToBeRepairer);
         
-        this._stateMachine.AddTransition(moveToLocation, buildConstructionSite, MovementTargetTypeConstruction);
+        // this._stateMachine.AddTransition(moveToLocation, buildConstructionSite, MovementTargetTypeConstruction);
         this._stateMachine.AddTransition(moveToLocation, harvestSource, And(ReachedDestination, MovementTargetTypeSource));
         this._stateMachine.AddTransition(moveToLocation, upgradeRoomController, And(ReachedDestination, MovementTargetTypeController));
         this._stateMachine.AddTransition(moveToLocation, transferToSpawn, And(ReachedDestination, MovementTargetTypeSpawn));

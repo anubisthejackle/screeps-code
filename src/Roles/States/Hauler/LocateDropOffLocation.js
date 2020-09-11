@@ -28,7 +28,7 @@ class LocateDropOffLocation extends Interface {
             target = spawn.pos;
             target.id = spawn.id;
         }
-
+        
         if(choice == 3){
             this.creep.memory.destinationType = 'container';
             const extensions = this.creep.room.find(FIND_MY_STRUCTURES, {
@@ -44,8 +44,6 @@ class LocateDropOffLocation extends Interface {
 
     OnEnter() {
         this.creep.memory.currentState = 'locateDropOffLocation';
-        this.creep.memory.destinationType = null;
-        this.creep.memory.destination = null;
     }
 
     OnExit() {
