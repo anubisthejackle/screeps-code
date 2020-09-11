@@ -98,7 +98,7 @@ class HarvesterHauler extends Role{
         if(!creep.memory.currentState){
             this._stateMachine.SetState(locateSource);
         }
-         
+        console.log(creep.id,creep.memory.currentState);
     }
 
     Tick() {

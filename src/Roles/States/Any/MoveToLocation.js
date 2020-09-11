@@ -11,7 +11,7 @@ class MoveToLocation extends Interface {
         if(!this.creep.memory.destination){
             return;
         }
-        
+
         this.creep.moveTo(this.creep.memory.destination.x, this.creep.memory.destination.y, {reusePath: 15, visualizePathStyle: {}});
 
     }
@@ -21,9 +21,7 @@ class MoveToLocation extends Interface {
     }
 
     OnExit() {
-        
-        this.creep.memory.destination = null;
-    
+            
     }
 }
 
