@@ -57,7 +57,7 @@ class HarvesterHauler extends Role{
         let MovementTargetTypeContainer = () => { return creep.memory.destinationType == 'container'; };
         let MovementTargetTypeConstruction = () => { return creep.memory.destinationType == 'construction'; };
         let FullOfEnergy = () => { return creep.store[RESOURCE_ENERGY] == creep.store.getCapacity() };
-        let EmptyOfEnergy = () => { return !FullOfEnergy(); };
+        let EmptyOfEnergy = () => { return creep.store[RESOURCE_ENERGY] == 0; };
         let ChoseToBeUpgrader = () => { return creep.memory.actionType == 'upgrade'; };
         let ChoseToBeBuilder = () => { return creep.memory.actionType == 'build'; };
         let ChoseToBeRepairer = () => { return creep.memory.actionType == 'repair'; };
@@ -80,7 +80,7 @@ class HarvesterHauler extends Role{
         this._stateMachine.AddTransition(chooseActionType, locateConstructionSite, ChoseToBeBuilder);
         this._stateMachine.AddTransition(chooseActionType, locateRepairSite, ChoseToBeRepairer);
         
-        // this._stateMachine.AddTransition(moveToLocation, buildConstructionSite, MovementTargetTypeConstruction);
+        this._stateMachine.AddTransition(moveToLocation, buildConstructionSite, MovementTargetTypeConstruction);
         this._stateMachine.AddTransition(moveToLocation, harvestSource, And(ReachedDestination, MovementTargetTypeSource));
         this._stateMachine.AddTransition(moveToLocation, upgradeRoomController, And(ReachedDestination, MovementTargetTypeController));
         this._stateMachine.AddTransition(moveToLocation, transferToSpawn, And(ReachedDestination, MovementTargetTypeSpawn));
@@ -91,14 +91,11 @@ class HarvesterHauler extends Role{
         this._stateMachine.AddTransition(storeInContainer, locateSource, EmptyOfEnergy);
         
         if(creep.memory.currentState){
-            console.log(creep.memory.currentState);
             eval("this._stateMachine.SetState(" + creep.memory.currentState + ");")
-        }
-
-        if(!creep.memory.currentState){
+        }else{
             this._stateMachine.SetState(locateSource);
         }
-        console.log(creep.id,creep.memory.currentState);
+
     }
 
     Tick() {

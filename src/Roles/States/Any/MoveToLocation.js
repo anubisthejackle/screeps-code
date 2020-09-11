@@ -12,6 +12,7 @@ class MoveToLocation extends Interface {
             return;
         }
 
+        this.creep.say('Walking');
         this.creep.moveTo(this.creep.memory.destination.x, this.creep.memory.destination.y, {reusePath: 15, visualizePathStyle: {}});
 
     }

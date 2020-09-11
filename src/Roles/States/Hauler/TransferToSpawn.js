@@ -9,8 +9,9 @@ class TransferToSpawn extends Interface{
 
     Tick() {
 
-        let spawn = Game.getObjectById(this.creep.memory.dropOffLocation.id);
-        this.creep.transfer(spawn, RESOURCE_ENERGY);
+        this.creep.say('Deposit');
+        let spawn = Game.getObjectById(this.creep.memory.dropOffLocation.id);        
+        this.creep.transfer(spawn, RESOURCE_ENERGY, Math.min(spawn.store.getFreeCapacity(RESOURCE_ENERGY), this.creep.store[RESOURCE_ENERGY]));
         
     }
 

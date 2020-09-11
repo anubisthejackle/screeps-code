@@ -1,10 +1,17 @@
-class UpgradeRoomController {
+let Interface = require('state.Interface');
 
-    constructor() {
-        
+class UpgradeRoomController extends Interface {
+
+    constructor(creep) {
+        super();
+        this.creep = creep;
     }
 
     Tick() {
+
+        this.creep.say('Upgrade');
+        let controller = Game.getObjectById(this.creep.memory.dropOffLocation.id);
+        let result = this.creep.upgradeController(controller);
 
     }
 

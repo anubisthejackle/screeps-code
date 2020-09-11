@@ -8,19 +8,25 @@ class LocateDropOffLocation extends Interface {
     }
 
     Tick() {
+        
+        let max = 2;
+        let min = 1;
 
-        let choice = Math.floor(Math.random() * 3) + 1;
+        let choice = Math.floor(Math.random() * (max - min + 1) + min);
         let target;
         
         if(choice == 1){
             this.creep.memory.destinationType = 'controller';
             target = this.creep.room.controller.pos;
+            target.id = this.creep.room.controller.id;
         }
 
         if(choice == 2){
             this.creep.memory.destinationType = 'spawn';
             const spawns = this.creep.room.find(FIND_MY_SPAWNS);
-            target = _.sample(spawns).pos;
+            let spawn = _.sample(spawns);
+            target = spawn.pos;
+            target.id = spawn.id;
         }
 
         if(choice == 3){
@@ -38,6 +44,8 @@ class LocateDropOffLocation extends Interface {
 
     OnEnter() {
         this.creep.memory.currentState = 'locateDropOffLocation';
+        this.creep.memory.destinationType = null;
+        this.creep.memory.destination = null;
     }
 
     OnExit() {

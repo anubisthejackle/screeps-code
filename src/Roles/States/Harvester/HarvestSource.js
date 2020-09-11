@@ -9,12 +9,9 @@ class HarvestSource extends Interface {
 
     Tick() {
 
+        this.creep.say('Harvest');
         let source = Game.getObjectById(this.creep.memory.source.id);
         this.creep.harvest(source);
-        
-        if(this.creep.store[RESOURCE_ENERGY] == this.creep.store.getCapacity()){
-            this.creep.memory.destinationType = null;
-        }
 
     }
 
