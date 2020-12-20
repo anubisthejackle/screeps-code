@@ -3,11 +3,18 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
         if(creep.store.getFreeCapacity() > 0) {
-            let sources = creep.room.find(FIND_SOURCES);
-            let used = sources[0];
+            let source;
 
-            if(creep.harvest(used) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(used, {visualizePathStyle: {stroke: '#ffaa00'}});
+            if(creep.memory.source){
+                source = Game.getObjectById(creep.memory.source);
+            }else{
+                var sources = creep.room.find(FIND_SOURCES);
+                source = sources[Math.floor(Math.random() * sources.length)];
+                creep.memory.source = source.id;
+            }
+
+            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
         else {
@@ -31,7 +38,7 @@ var roleHarvester = {
                 creep.memory.noTargetCount++;
 
                 if(creep.memory.noTargetCount > 10){
-                    creep.memory.role = 'upgrader';
+                    creep.memory.role = 'temp-upgrader';
                 }
             }
         }
