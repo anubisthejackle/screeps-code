@@ -1,3 +1,5 @@
+const branch = require('git-branch');
+
 class ScreepsConfig {
 
     constructor(grunt) {
@@ -72,7 +74,7 @@ class ScreepsConfig {
                 },
                 email: config.private.email,
                 password: config.private.password,
-                branch: config.private.branch,
+                branch: branch.sync(),
                 ptr: config.private.ptr
             },
             files: [
@@ -96,12 +98,16 @@ class ScreepsConfig {
             options: {
                 email: config.public.email,
                 password: config.public.password,
-                branch: config.public.branch,
+                branch: branch.sync(),
                 ptr: config.public.ptr
             },
-            dist: {
-                src: ['dist/*.js']
-            }
+            files: [
+                {
+                    expand: true,
+                    cwd: 'dist/',
+                    src: '*.js',
+                }
+            ]
         };
 
     }
@@ -136,6 +142,7 @@ module.exports = function(grunt) {
     let currentDate = new Date();
     
     grunt.log.subhead(`Task Start: ${currentDate.toLocaleString()}`);
+    grunt.log.subhead(`Git Branch: ${branch.sync()}`);
 
     config.init();
 
