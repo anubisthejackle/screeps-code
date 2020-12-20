@@ -4,7 +4,8 @@
   "description": "Screeps code for AnubisTheJackle",
   "main": "src/main.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "grunt"
   },
   "repository": {
     "type": "git",
