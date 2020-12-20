@@ -8,8 +8,10 @@ class ScreepsConfig {
 
         
         this.grunt.initConfig({
-            screeps_public: this.configurePublicGruntScreeps(),
-            screeps_private: this.configurePrivateGruntScreeps(),
+            screeps: {
+                public: this.configurePublicGruntScreeps(),
+                private: this.configurePrivateGruntScreeps()
+            },
             clean: this.configureGruntContribClean(),
             copy: this.configureGruntContribCopy(),
             file_append: this.configureGruntFileAppend()
@@ -17,8 +19,8 @@ class ScreepsConfig {
 
         this.configureGruntReplace();
 
-        this.grunt.registerTask('default', ['clean','copy:screeps','file_append:versioning','replace','screeps_private']);
-        this.grunt.registerTask('default', ['clean','copy:screeps','file_append:versioning','replace','screeps_public']);
+        this.grunt.registerTask('default', ['clean','copy:screeps','file_append:versioning','replace','screeps:private']);
+        this.grunt.registerTask('public', ['clean','copy:screeps','file_append:versioning','replace','screeps:public']);
 
     }
 
@@ -73,9 +75,13 @@ class ScreepsConfig {
                 branch: config.private.branch,
                 ptr: config.private.ptr
             },
-            dist: {
-                src: ['dist/*.js']
-            }
+            files: [
+                {
+                    expand: true,
+                    cwd: 'dist/',
+                    src: '*.js',
+                }
+            ],
         };
 
     }
