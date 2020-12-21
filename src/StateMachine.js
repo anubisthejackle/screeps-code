@@ -5,18 +5,18 @@ class StateMachine {
         this.transitions = transitions;
     }
 
-    dispatch(actionName, ...payload) {
+    dispatch(scope, actionName, ...payload) {
 
         const actions = this.transitions[this.state];
         const action = actions[actionName];
 
         if(action){
-            action.apply(this, ...payload);
+            action.apply(scope, payload);
         }
 
     }
 
-    changeState(newState) {
+    changeState(newState, ...payload) {
         
         if(this.transitions[this.state].beforeChange){
             this.transitions[this.state].beforeChange(newState);
@@ -26,9 +26,15 @@ class StateMachine {
         this.state = newState;
 
         if(this.transitions[this.state].onChange){
-            this.transitions[this.state].onChange(previousState);
+            this.transitions[this.state].onChange(previousState, newState);
+        }
+
+        if(this.transitions.onAnyChange){
+            this.transitions.onAnyChange(previousState, newState, ...payload);
         }
 
     }
 
 }
+
+module.exports = StateMachine;

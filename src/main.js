@@ -22,18 +22,14 @@ module.exports.loop = function () {
 
     let sites = Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES);
 
-    let upgraderCount = 10;
-    upgraderCount -= sites.length;
-    upgraderCount = Math.max(upgraderCount, 5);
-
-    if(upgraders.length < upgraderCount) {
+    if(upgraders.length < 5) {
         var newName = 'Upgrader' + Game.time;
         console.log('Spawning new upgrader: ' + newName);
         Game.spawns['Spawn1'].spawnCreep([WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE], newName,
             {memory: {role: 'upgrader'}});
     }
 
-    if(sites.length > 0 && builders.length < Math.min(sites.length, 5)) {
+    if(sites.length > 0 && builders.length < 5) {
         var newName = 'Builder' + Game.time;
         console.log('Spawning new builder: ' + newName);
         Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE], newName,

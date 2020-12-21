@@ -6,7 +6,7 @@ const transitions = {
             var sources = creep.room.find(FIND_SOURCES);
             source = sources[Math.floor(Math.random() * sources.length)];
             creep.memory.source = source.id;
-            this.changeState("HARVESTING");
+            this.changeState("HARVESTING", creep);
         }
     },
     HARVESTING: {
@@ -18,13 +18,13 @@ const transitions = {
             }
 
             if(creep.store.getFreeCapacity() == 0){
-                return this.changeState("FINDSTORAGE");
+                return this.changeState("FINDSTORAGE", creep);
             }
         }
     },
     FINDSTORAGE: {
         run: function(creep) {
-            var targets = this.creep.room.find(FIND_STRUCTURES, {
+            var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION ||
                         structure.structureType == STRUCTURE_SPAWN ||
@@ -33,11 +33,11 @@ const transitions = {
                 }
             });
 
-            let target = targets[Math.floor(Math.random() * sources.length)];
+            let target = targets[Math.floor(Math.random() * targets.length)];
 
             creep.memory.target = target.id;
 
-            this.changeState("DEPOSITING");
+            this.changeState("DEPOSITING", creep);
         }
     },
     DEPOSITING: {
@@ -47,31 +47,35 @@ const transitions = {
             let errCode = creep.transfer(target, RESOURCE_ENERGY);
 
             if(errCode == ERR_NOT_IN_RANGE) {
-                return creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                return creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
             }
 
             if(errCode == ERR_FULL){
-                return this.changeState('FINDSTORAGE');
+                return this.changeState('FINDSTORAGE', creep);
             }
 
             if(creep.store.getFreeCapacity() == 0){
-                return this.changeState('HARVESTING');
+                return this.changeState('HARVESTING', creep);
             }
         }
-    }
-}
+    },
 
-class Harvester {
+    onAnyChange: function(previousState, newState, creep) {
+        if(creep.memory){
+            creep.memory.currentState = newState;
+        }
+    }
+};
+
+class Harvester extends StateMachine {
 
     constructor(creep) {
+        super((creep.memory.currentState || "IDLE"), transitions);
         this.creep = creep;
-        this.machine = new StateMachine((creep.memory.currentState || "IDLE"), transitions);
     }
 
     run() {
-
-        this.machine.dispatch('run', this.creep);
-
+        this.dispatch(this, 'run', this.creep);
     }
 
 }
